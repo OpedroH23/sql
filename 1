@@ -1,0 +1,92 @@
+
+---
+
+# ✅ **2. SCRIPT DE CRIAÇÃO (01_create_tables.sql)**
+
+```sql
+CREATE DATABASE IF NOT EXISTS escola_musica;
+USE escola_musica;
+
+-- TABELA ALUNO
+CREATE TABLE ALUNO (
+    ID_Aluno INT PRIMARY KEY,
+    Nome VARCHAR(100),
+    CPF CHAR(11),
+    Telefone VARCHAR(20),
+    Email VARCHAR(120),
+    Rua VARCHAR(100),
+    Numero VARCHAR(10),
+    Bairro VARCHAR(60),
+    CEP CHAR(8)
+);
+
+-- PROFESSOR
+CREATE TABLE PROFESSOR (
+    ID_Professor INT PRIMARY KEY,
+    Nome VARCHAR(100),
+    CPF CHAR(11),
+    Telefone VARCHAR(20),
+    Email VARCHAR(120)
+);
+
+-- CURSO
+CREATE TABLE CURSO (
+    ID_Curso INT PRIMARY KEY,
+    Nome_Curso VARCHAR(80),
+    Nivel VARCHAR(30),
+    Valor_Mensalidade DECIMAL(10,2)
+);
+
+-- TURMA
+CREATE TABLE TURMA (
+    ID_Turma INT PRIMARY KEY,
+    Dia_Semana VARCHAR(15),
+    Horario_Inicio TIME,
+    Horario_Fim TIME,
+    ID_Professor INT,
+    ID_Curso INT,
+    FOREIGN KEY (ID_Professor) REFERENCES PROFESSOR(ID_Professor),
+    FOREIGN KEY (ID_Curso) REFERENCES CURSO(ID_Curso)
+);
+
+-- MENSALIDADE
+CREATE TABLE MENSALIDADE (
+    ID_Mensalidade INT PRIMARY KEY,
+    Valor_Devido DECIMAL(10,2),
+    Data_Vencimento DATE,
+    Data_Pagamento DATE,
+    Status VARCHAR(20),
+    ID_Aluno INT,
+    FOREIGN KEY (ID_Aluno) REFERENCES ALUNO(ID_Aluno)
+);
+
+-- MATRICULA_ALUNO
+CREATE TABLE MATRICULA_ALUNO (
+    ID_Matricula INT PRIMARY KEY,
+    Data_Matricula DATE,
+    Status VARCHAR(20),
+    ID_Aluno INT,
+    ID_Curso INT,
+    FOREIGN KEY (ID_Aluno) REFERENCES ALUNO(ID_Aluno),
+    FOREIGN KEY (ID_Curso) REFERENCES CURSO(ID_Curso)
+);
+
+-- REGISTRO_AULA
+CREATE TABLE REGISTRO_AULA (
+    ID_Turma INT,
+    ID_Aluno INT,
+    Data_Aula DATE,
+    Presenca CHAR(1),
+    PRIMARY KEY(ID_Turma, ID_Aluno, Data_Aula),
+    FOREIGN KEY(ID_Turma) REFERENCES TURMA(ID_Turma),
+    FOREIGN KEY(ID_Aluno) REFERENCES ALUNO(ID_Aluno)
+);
+
+-- ESPECIALIDADE
+CREATE TABLE ESPECIALIDADE (
+    ID_Professor INT,
+    ID_Curso INT,
+    PRIMARY KEY(ID_Professor, ID_Curso),
+    FOREIGN KEY(ID_Professor) REFERENCES PROFESSOR(ID_Professor),
+    FOREIGN KEY(ID_Curso) REFERENCES CURSO(ID_Curso)
+);
